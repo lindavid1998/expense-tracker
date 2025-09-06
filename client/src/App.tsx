@@ -1,8 +1,8 @@
-import { Button } from "./components/ui/button";
+import ExpenseForm from "./components/ExpenseForm";
 function App() {
   return (
     <div className="font-bold">
-      <Button>Hello</Button>
+      <ExpenseForm />
     </div>
   );
 }
