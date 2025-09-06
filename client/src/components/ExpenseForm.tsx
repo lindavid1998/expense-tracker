@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -78,7 +77,7 @@ export default function ExpenseForm() {
       <form
         // handleSubmit validates input before calling onSubmit
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-xl mx-auto py-10"
+        className="w-full space-y-8 max-w-xl mx-auto py-2"
       >
         <FormField
           control={form.control} // register the form field

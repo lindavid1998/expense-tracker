@@ -1,8 +1,8 @@
-import ExpenseForm from "./components/ExpenseForm";
+import { AddExpenseDialog } from "./components/AddExpenseDialog";
 function App() {
   return (
     <div className="font-bold">
-      <ExpenseForm />
+      <AddExpenseDialog />
     </div>
   );
 }
