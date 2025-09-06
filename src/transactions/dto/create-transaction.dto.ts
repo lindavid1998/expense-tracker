@@ -1,10 +1,6 @@
-import { IsDate, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsDateString, IsOptional } from 'class-validator';
 
 export class CreateTransactionDto {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
   @IsInt()
   amount: number;
 
@@ -14,6 +10,7 @@ export class CreateTransactionDto {
   @IsInt()
   categoryId: number;
 
-  @IsDate()
-  timestamp?: Date;
+  @IsOptional()
+  @IsDateString()
+  timestamp?: string;
 }
