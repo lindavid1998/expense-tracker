@@ -3,16 +3,16 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
-  constructor() {
-    super({
-      // The global `omit` configuration
-      omit: {
-        user: {
-          password: true,
-        },
-      },
-    });
-  }
+  // constructor() {
+  //   super({
+  //     // The global `omit` configuration
+  //     omit: {
+  //       user: {
+  //         password: true,
+  //       },
+  //     },
+  //   });
+  // }
 
   async onModuleInit() {
     await this.$connect();
