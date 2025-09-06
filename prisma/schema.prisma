@@ -14,10 +14,27 @@ generator client {
 }
 
 model User {
-  id        Int @default(autoincrement()) @id
-  name      String
-  email     String @unique
-  password  String
-  createdAt DateTime @default(now())
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique
+  password    String
+  createdAt   DateTime      @default(now()) @map("created_at")
+  Transaction Transaction[]
 }
 
+model Transaction {
+  id         Int      @id @default(autoincrement())
+  amount     Int
+  timestamp  DateTime @default(now())
+  categoryId Int      @map("category_id")
+  userId     Int      @map("user_id")
+
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        String
+  Transaction Transaction[]
+}
