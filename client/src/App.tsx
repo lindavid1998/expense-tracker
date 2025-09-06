@@ -1,7 +1,10 @@
+import { Button } from "./components/ui/button";
 function App() {
   return (
-    <div className="font-bold">Hello world</div>
-  )
+    <div className="font-bold">
+      <Button>Hello</Button>
+    </div>
+  );
 }
 
-export default App
+export default App;
