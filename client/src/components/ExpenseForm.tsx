@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
   Card,
   CardAction,
   CardContent,
@@ -8,6 +17,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -40,7 +56,10 @@ function ExpenseForm({ onClose }: ExpenseFormProps) {
     };
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_HOST}/transactions` , data);
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_HOST}/transactions`,
+        data
+      );
     } catch (error) {
       console.log(error);
     }
@@ -69,6 +88,16 @@ function ExpenseForm({ onClose }: ExpenseFormProps) {
           />
 
           {/* category selector */}
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Enter a category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1</SelectItem>
+              <SelectItem value="2">2</SelectItem>
+              <SelectItem value="3">3</SelectItem>
+            </SelectContent>
+          </Select>
 
           {/* actions buttons */}
           <div className="mt-2 flex gap-2 justify-end">
