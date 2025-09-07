@@ -5,13 +5,13 @@ import { Trash } from "lucide-react";
 
 interface ExpenseRowProps {
   expense: Expense;
-  onDelete: () => void;
+  onDelete: (id: number) => void;
 }
 
 function ExpenseRow({ expense, onDelete }: ExpenseRowProps) {
   const handleDelete = () => {
     console.log('deleting expense:', expense.id)
-    onDelete();
+    onDelete(expense.id);
   }
 
   return (

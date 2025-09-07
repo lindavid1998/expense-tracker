@@ -8,6 +8,9 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  HttpException,
+  ForbiddenException,
+  NotFoundException,
 } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
@@ -61,7 +64,13 @@ export class ExpensesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.expensesService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    // get userId from request
+    // for now, hard coded
+    const userId = 1;
+
+    await this.expensesService.remove(id, userId);
+
+    return { success: true };
   }
 }

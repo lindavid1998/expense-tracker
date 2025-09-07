@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -24,15 +28,24 @@ export class ExpensesService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} expense`;
+  async findOne(id: number) {
+    return await this.prisma.expense.findUnique({ where: { id } });
   }
 
   update(id: number, updateExpenseDto: UpdateExpenseDto) {
     return `This action updates a #${id} expense`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} expense`;
+  async remove(id: number, userId: number) {
+    const expense = await this.findOne(id);
+    if (!expense) {
+      throw new NotFoundException();
+    }
+
+    if (expense.userId != userId) {
+      throw new ForbiddenException();
+    }
+
+    return await this.prisma.expense.delete({ where: { id } });
   }
 }
