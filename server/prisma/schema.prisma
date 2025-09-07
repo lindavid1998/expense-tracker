@@ -19,10 +19,10 @@ model User {
   email       String        @unique
   password    String
   createdAt   DateTime      @default(now()) @map("created_at")
-  Transaction Transaction[]
+  Expense Expense[]
 }
 
-model Transaction {
+model Expense {
   id         Int      @id @default(autoincrement())
   amount     Int
   timestamp  DateTime @default(now())
@@ -36,5 +36,5 @@ model Transaction {
 model Category {
   id          Int           @id @default(autoincrement())
   name        String
-  Transaction Transaction[]
+  Expense Expense[]
 }

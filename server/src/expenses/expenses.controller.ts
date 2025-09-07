@@ -9,31 +9,31 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { ExpensesService } from './expenses.service';
+import { CreateTransactionDto } from './dto/create-expense.dto';
+import { UpdateTransactionDto } from './dto/update-expense';
 import { ValidationPipe } from '@nestjs/common';
-import { TransactionResponseDto } from './dto/transaction-response.dto';
+import { TransactionResponseDto } from './dto/expense-response.dto';
 import { Prisma } from '@prisma/client';
 
 type TransactionWithCategory = Prisma.TransactionGetPayload<{
   include: { category: true };
 }>;
 
-@Controller('transactions')
-export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+@Controller('expenses')
+export class ExpensesController {
+  constructor(private readonly expensesService: ExpensesService) {}
 
   @Post()
   async create(
     @Body(new ValidationPipe()) createTransactionDto: CreateTransactionDto,
   ) {
-    return await this.transactionsService.create(createTransactionDto);
+    return await this.expensesService.create(createTransactionDto);
   }
 
   @Get()
   findAll() {
-    return this.transactionsService.findAll();
+    return this.expensesService.findAll();
   }
 
   @Get('/user/:userId')
@@ -41,7 +41,7 @@ export class TransactionsController {
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<TransactionResponseDto[]> {
     const results: TransactionWithCategory[] =
-      await this.transactionsService.findAll(userId);
+      await this.expensesService.findAll(userId);
 
     // map results to TransactionResponseDto type
     return results.map((result) => ({
@@ -54,7 +54,7 @@ export class TransactionsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
+    return this.expensesService.findOne(+id);
   }
 
   @Patch(':id')
@@ -62,11 +62,11 @@ export class TransactionsController {
     @Param('id') id: string,
     @Body() updateTransactionDto: UpdateTransactionDto,
   ) {
-    return this.transactionsService.update(+id, updateTransactionDto);
+    return this.expensesService.update(+id, updateTransactionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
+    return this.expensesService.remove(+id);
   }
 }

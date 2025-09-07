@@ -82,7 +82,7 @@ export default function ExpenseForm() {
         userId: 1, // hard coded
       };
 
-      const url = `${import.meta.env.VITE_BACKEND_HOST}/transactions`;
+      const url = `${import.meta.env.VITE_BACKEND_HOST}/expenses`;
       const response = await axios.post(url, data);
       console.log(response);
 
