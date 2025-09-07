@@ -1,6 +1,6 @@
 import { type Expense } from "@/types";
 import ExpenseTableView from "./ExpenseTableView";
-import { useEffect, useState } from "React";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const userId = 1; // HARD CODED

@@ -1,4 +1,4 @@
-export class TransactionResponseDto {
+export class ExpenseResponseDto {
   id: number;
   amount: number;
   category: string;

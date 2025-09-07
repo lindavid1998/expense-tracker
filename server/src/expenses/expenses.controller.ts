@@ -10,13 +10,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
-import { CreateTransactionDto } from './dto/create-expense.dto';
-import { UpdateTransactionDto } from './dto/update-expense';
+import { CreateExpenseDto } from './dto/create-expense.dto';
+import { UpdateExpenseDto } from './dto/update-expense';
 import { ValidationPipe } from '@nestjs/common';
-import { TransactionResponseDto } from './dto/expense-response.dto';
+import { ExpenseResponseDto } from './dto/expense-response.dto';
 import { Prisma } from '@prisma/client';
 
-type TransactionWithCategory = Prisma.TransactionGetPayload<{
+type ExpenseWithCategory = Prisma.ExpenseGetPayload<{
   include: { category: true };
 }>;
 
@@ -25,10 +25,8 @@ export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Post()
-  async create(
-    @Body(new ValidationPipe()) createTransactionDto: CreateTransactionDto,
-  ) {
-    return await this.expensesService.create(createTransactionDto);
+  async create(@Body(new ValidationPipe()) createExpenseDto: CreateExpenseDto) {
+    return await this.expensesService.create(createExpenseDto);
   }
 
   @Get()
@@ -39,11 +37,11 @@ export class ExpensesController {
   @Get('/user/:userId')
   async findAllByUser(
     @Param('userId', ParseIntPipe) userId: number,
-  ): Promise<TransactionResponseDto[]> {
-    const results: TransactionWithCategory[] =
+  ): Promise<ExpenseResponseDto[]> {
+    const results: ExpenseWithCategory[] =
       await this.expensesService.findAll(userId);
 
-    // map results to TransactionResponseDto type
+    // map results to ExpenseResponseDto type
     return results.map((result) => ({
       id: result.id,
       amount: result.amount,
@@ -58,11 +56,8 @@ export class ExpensesController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTransactionDto: UpdateTransactionDto,
-  ) {
-    return this.expensesService.update(+id, updateTransactionDto);
+  update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
+    return this.expensesService.update(+id, updateExpenseDto);
   }
 
   @Delete(':id')

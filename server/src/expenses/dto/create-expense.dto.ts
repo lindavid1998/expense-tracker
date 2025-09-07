@@ -1,6 +1,6 @@
 import { IsInt, IsDateString, IsOptional } from 'class-validator';
 
-export class CreateTransactionDto {
+export class CreateExpenseDto {
   @IsInt()
   amount: number;
 
