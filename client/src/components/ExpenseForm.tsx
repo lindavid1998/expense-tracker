@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { type Category } from "@/types";
 
 /* The benefit of using react hook form
 - only need to worry about:
@@ -34,11 +35,6 @@ const formSchema = z.object({
   categoryId: z.coerce.number<number>().int().min(1).max(4),
   amount: z.coerce.number<number>().int().positive(),
 });
-
-interface Category {
-  id: number;
-  name: string;
-}
 
 export default function ExpenseForm() {
   const [categories, setCategories] = useState<Category[]>();
