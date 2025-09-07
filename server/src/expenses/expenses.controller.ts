@@ -49,6 +49,7 @@ export class ExpensesController {
       id: result.id,
       amount: result.amount,
       category: result.category.name,
+      categoryId: result.categoryId,
       timestamp: result.timestamp,
     }));
   }
@@ -59,8 +60,14 @@ export class ExpensesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
-    return this.expensesService.update(+id, updateExpenseDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateExpenseDto: UpdateExpenseDto,
+  ) {
+    // get userId from request object, then pass to service
+    const userId = 1;
+
+    return this.expensesService.update(id, userId, updateExpenseDto);
   }
 
   @Delete(':id')

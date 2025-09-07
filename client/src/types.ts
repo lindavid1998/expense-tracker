@@ -2,6 +2,7 @@ export interface Expense {
   id: number;
   amount: number;
   category: string;
+  categoryId: number; // for form purposes
   timestamp: string;
 }
 

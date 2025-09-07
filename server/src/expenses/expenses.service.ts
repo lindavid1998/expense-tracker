@@ -12,6 +12,14 @@ import { type Expense } from '@prisma/client';
 export class ExpensesService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async checkExists(id: number) {
+    const expense = await this.findOne(id);
+    if (!expense) {
+      throw new NotFoundException();
+    }
+    return expense;
+  }
+
   async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
     return await this.prisma.expense.create({
       data: createExpenseDto,
@@ -32,16 +40,24 @@ export class ExpensesService {
     return await this.prisma.expense.findUnique({ where: { id } });
   }
 
-  update(id: number, updateExpenseDto: UpdateExpenseDto) {
-    return `This action updates a #${id} expense`;
+  async update(id: number, userId: number, updateExpenseDto: UpdateExpenseDto) {
+    const expense = await this.checkExists(id);
+
+    // check authorization
+    if (expense.userId != userId) {
+      throw new ForbiddenException();
+    }
+
+    return await this.prisma.expense.update({
+      where: { id },
+      data: updateExpenseDto,
+    });
   }
 
   async remove(id: number, userId: number) {
-    const expense = await this.findOne(id);
-    if (!expense) {
-      throw new NotFoundException();
-    }
+    const expense = await this.checkExists(id);
 
+    // check authorization
     if (expense.userId != userId) {
       throw new ForbiddenException();
     }

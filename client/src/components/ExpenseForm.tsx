@@ -36,7 +36,20 @@ const formSchema = z.object({
   amount: z.coerce.number<number>().int().positive(),
 });
 
-export default function ExpenseForm() {
+interface ExpenseFormProps {
+  initialValues?: z.infer<typeof formSchema>;
+  isEdit?: boolean;
+  id?: number;
+}
+
+export default function ExpenseForm({
+  initialValues,
+  isEdit = false,
+  id,
+}: ExpenseFormProps) {
+  console.log("isEdit", isEdit);
+  console.log("initialValues", initialValues);
+  console.log("id", id);
   const [categories, setCategories] = useState<Category[]>();
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +80,8 @@ export default function ExpenseForm() {
   // i.e. values, dirty, onChange, validation
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    // load initial values here?
+    defaultValues: initialValues || {
       amount: 0,
     },
   });
@@ -83,6 +97,7 @@ export default function ExpenseForm() {
       };
 
       const url = `${import.meta.env.VITE_BACKEND_HOST}/expenses`;
+      // if edit, send PATCH request
       const response = await axios.post(url, data);
       console.log(response);
 
@@ -127,7 +142,10 @@ export default function ExpenseForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value?.toString()}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />

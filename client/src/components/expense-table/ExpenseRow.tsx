@@ -2,6 +2,7 @@ import { type Expense } from "@/types";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
+import EditExpenseDialog from "../EditExpenseDialog";
 
 interface ExpenseRowProps {
   expense: Expense;
@@ -22,6 +23,7 @@ function ExpenseRow({ expense, onDelete }: ExpenseRowProps) {
       <div className="w-40">
         Date: {format(new Date(expense.timestamp), "MM/dd/yyyy")}
       </div>
+      <EditExpenseDialog expense={expense} />
       <Button onClick={handleDelete} variant="secondary" size="icon" className="size-8">
         <Trash />
       </Button>
