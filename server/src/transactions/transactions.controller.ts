@@ -13,6 +13,12 @@ import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { ValidationPipe } from '@nestjs/common';
+import { TransactionResponseDto } from './dto/transaction-response.dto';
+import { Prisma } from '@prisma/client';
+
+type TransactionWithCategory = Prisma.TransactionGetPayload<{
+  include: { category: true };
+}>;
 
 @Controller('transactions')
 export class TransactionsController {
@@ -31,8 +37,19 @@ export class TransactionsController {
   }
 
   @Get('/user/:userId')
-  findAllByUser(@Param('userId', ParseIntPipe) userId: number) {
-    return this.transactionsService.findAll(userId);
+  async findAllByUser(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<TransactionResponseDto[]> {
+    const results: TransactionWithCategory[] =
+      await this.transactionsService.findAll(userId);
+
+    // map results to TransactionResponseDto type
+    return results.map((result) => ({
+      id: result.id,
+      amount: result.amount,
+      category: result.category.name,
+      timestamp: result.timestamp,
+    }));
   }
 
   @Get(':id')

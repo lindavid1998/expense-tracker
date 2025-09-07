@@ -1,7 +1,8 @@
 export interface Expense {
+  id: number;
   amount: number;
   category: string;
-  timestamp: Date;
+  timestamp: string;
 }
 
 export interface Category {

@@ -16,8 +16,14 @@ export class TransactionsService {
     });
   }
 
-  findAll(userId?: number) {
-    return this.prisma.transaction.findMany({ where: { userId } });
+  async findAll(userId?: number) {
+    return await this.prisma.transaction.findMany({
+      where: { userId },
+      include: { category: true },
+      orderBy: {
+        timestamp: 'desc',
+      },
+    });
   }
 
   findOne(id: number) {
