@@ -16,16 +16,15 @@ function ExpenseRow({ expense, onDelete }: ExpenseRowProps) {
 
   return (
     <div className="flex flex-row gap-2 items-center">
-      <div className="w-20">ID: {expense.id}</div>
       <div className="w-40">${expense.amount}</div>
-      <div className="w-80">Category: {expense.category}</div>
+      <div className="w-80">{expense.category}</div>
       <div className="w-40">
-        Date: {format(new Date(expense.timestamp), "MM/dd/yyyy")}
+        {format(new Date(expense.timestamp), "MM/dd/yyyy")}
       </div>
       <AddEditExpenseDialog expense={expense} />
       <Button
         onClick={handleDelete}
-        variant="secondary"
+        variant="destructive"
         size="icon"
         className="size-8"
       >

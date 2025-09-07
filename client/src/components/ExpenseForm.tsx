@@ -104,7 +104,7 @@ export default function ExpenseForm({
       }
 
       console.log("Form data", values);
-      toast.success(`Successfully ${isEdit ? "added" : "edited"} expense`);
+      toast.success(`Successfully ${isEdit ? "edited" : "added"} expense`);
       onSuccess();
     } catch (error) {
       console.error("Form submission error", error);
