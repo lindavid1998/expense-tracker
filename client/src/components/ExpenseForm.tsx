@@ -39,17 +39,17 @@ const formSchema = z.object({
 interface ExpenseFormProps {
   initialValues?: z.infer<typeof formSchema>;
   isEdit?: boolean;
-  id?: number;
+  expenseId?: number;
 }
 
 export default function ExpenseForm({
   initialValues,
   isEdit = false,
-  id,
+  expenseId,
 }: ExpenseFormProps) {
   console.log("isEdit", isEdit);
   console.log("initialValues", initialValues);
-  console.log("id", id);
+  console.log("expenseId", expenseId);
   const [categories, setCategories] = useState<Category[]>();
   const [loading, setLoading] = useState(false);
 
@@ -97,9 +97,13 @@ export default function ExpenseForm({
       };
 
       const url = `${import.meta.env.VITE_BACKEND_HOST}/expenses`;
-      // if edit, send PATCH request
-      const response = await axios.post(url, data);
-      console.log(response);
+
+      if (isEdit) {
+        await axios.patch(`${url}/${expenseId}`, data);
+      } else {
+        const response = await axios.post(url, data);
+        console.log(response);
+      }
 
       console.log("Form data", values);
       toast(

@@ -32,7 +32,7 @@ function EditExpenseDialog({ expense }: { expense: Expense }) {
             amount: expense.amount,
             categoryId: expense.categoryId,
           }}
-          id={expense.id}
+          expenseId={expense.id}
         />
       </DialogContent>
     </Dialog>
