@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -26,6 +28,11 @@ export class TransactionsController {
   @Get()
   findAll() {
     return this.transactionsService.findAll();
+  }
+
+  @Get('/user/:userId')
+  findAllByUser(@Param('userId', ParseIntPipe) userId: number) {
+    return this.transactionsService.findAll(userId);
   }
 
   @Get(':id')

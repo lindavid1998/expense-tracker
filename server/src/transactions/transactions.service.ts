@@ -11,13 +11,13 @@ export class TransactionsService {
   async create(
     createTransactionDto: CreateTransactionDto,
   ): Promise<Transaction> {
-    return this.prisma.transaction.create({
+    return await this.prisma.transaction.create({
       data: createTransactionDto,
     });
   }
 
-  findAll() {
-    return `This action returns all transactions`;
+  findAll(userId?: number) {
+    return this.prisma.transaction.findMany({ where: { userId } });
   }
 
   findOne(id: number) {
