@@ -2,8 +2,7 @@ import { type Expense } from "@/types";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
-import EditExpenseDialog from "../EditExpenseDialog";
-
+import AddEditExpenseDialog from "../AddEditExpenseDialog";
 interface ExpenseRowProps {
   expense: Expense;
   onDelete: (id: number) => void;
@@ -11,9 +10,9 @@ interface ExpenseRowProps {
 
 function ExpenseRow({ expense, onDelete }: ExpenseRowProps) {
   const handleDelete = () => {
-    console.log('deleting expense:', expense.id)
+    console.log("deleting expense:", expense.id);
     onDelete(expense.id);
-  }
+  };
 
   return (
     <div className="flex flex-row gap-2 items-center">
@@ -23,8 +22,13 @@ function ExpenseRow({ expense, onDelete }: ExpenseRowProps) {
       <div className="w-40">
         Date: {format(new Date(expense.timestamp), "MM/dd/yyyy")}
       </div>
-      <EditExpenseDialog expense={expense} />
-      <Button onClick={handleDelete} variant="secondary" size="icon" className="size-8">
+      <AddEditExpenseDialog expense={expense} />
+      <Button
+        onClick={handleDelete}
+        variant="secondary"
+        size="icon"
+        className="size-8"
+      >
         <Trash />
       </Button>
     </div>

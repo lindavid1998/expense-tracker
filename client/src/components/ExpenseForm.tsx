@@ -38,18 +38,14 @@ const formSchema = z.object({
 
 interface ExpenseFormProps {
   initialValues?: z.infer<typeof formSchema>;
-  isEdit?: boolean;
   expenseId?: number;
 }
 
 export default function ExpenseForm({
   initialValues,
-  isEdit = false,
   expenseId,
 }: ExpenseFormProps) {
-  console.log("isEdit", isEdit);
-  console.log("initialValues", initialValues);
-  console.log("expenseId", expenseId);
+  const isEdit = !!expenseId; // if expenseId is passed in, set edit mode to true
   const [categories, setCategories] = useState<Category[]>();
   const [loading, setLoading] = useState(false);
 
