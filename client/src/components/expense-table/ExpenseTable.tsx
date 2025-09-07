@@ -3,19 +3,6 @@ import ExpenseTableView from "./ExpenseTableView";
 import { useEffect, useState } from "React";
 import axios from "axios";
 
-// const expenses: Expense[] = [
-//   {
-//     amount: 50,
-//     category: "Food",
-//     timestamp: new Date(),
-//   },
-//   {
-//     amount: 150,
-//     category: "Groceries",
-//     timestamp: new Date(),
-//   },
-// ];
-
 const userId = 1; // HARD CODED
 
 function ExpenseTable() {
@@ -30,7 +17,6 @@ function ExpenseTable() {
           `${import.meta.env.VITE_BACKEND_HOST}/expenses/user/${userId}`
         );
         setExpenses(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       } finally {
