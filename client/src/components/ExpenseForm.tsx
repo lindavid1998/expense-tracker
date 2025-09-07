@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
+import { useState, useEffect } from "react";
 
 /* The benefit of using react hook form
 - only need to worry about:
@@ -34,7 +35,36 @@ const formSchema = z.object({
   amount: z.coerce.number<number>().int().positive(),
 });
 
+interface Category {
+  id: number;
+  name: string;
+}
+
 export default function ExpenseForm() {
+  const [categories, setCategories] = useState<Category[]>();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        console.log("fetching categories...");
+        setLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_HOST}/categories`
+        );
+        const data = response.data;
+        setCategories(data);
+        console.log("loaded categories");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   // define the form
   // form has properties: handleSubmit, control, formState, ...
   // control connects form fields to state management
@@ -58,7 +88,7 @@ export default function ExpenseForm() {
 
       const url = `${import.meta.env.VITE_BACKEND_HOST}/transactions`;
       const response = await axios.post(url, data);
-      console.log(response)
+      console.log(response);
 
       console.log("Form data", values);
       toast(
@@ -108,10 +138,17 @@ export default function ExpenseForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="1">Food</SelectItem>
-                  <SelectItem value="2">Transportation</SelectItem>
-                  <SelectItem value="3">Entertainment</SelectItem>
-                  <SelectItem value="4">Groceries</SelectItem>
+                  {loading ? (
+                    <div className="text-sm">Loading categories...</div>
+                  ) : (
+                    <>
+                      {categories?.map((category) => (
+                        <SelectItem key={category.id} value={`${category.id}`}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
                 </SelectContent>
               </Select>
 
