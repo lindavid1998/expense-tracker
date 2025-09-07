@@ -39,11 +39,13 @@ const formSchema = z.object({
 interface ExpenseFormProps {
   initialValues?: z.infer<typeof formSchema>;
   expenseId?: number;
+  onSuccess: () => void;
 }
 
 export default function ExpenseForm({
   initialValues,
   expenseId,
+  onSuccess,
 }: ExpenseFormProps) {
   const isEdit = !!expenseId; // if expenseId is passed in, set edit mode to true
   const [categories, setCategories] = useState<Category[]>();
@@ -102,11 +104,8 @@ export default function ExpenseForm({
       }
 
       console.log("Form data", values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
+      toast.success(`Successfully ${isEdit ? "added" : "edited"} expense`);
+      onSuccess();
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");

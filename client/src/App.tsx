@@ -1,6 +1,7 @@
 import AddEditExpenseDialog from "./components/AddEditExpenseDialog";
 import ExpenseTable from "./components/expense-table/ExpenseTable";
 import { Card } from "./components/ui/card";
+import { Toaster } from 'sonner';
 
 function App() {
   return (
@@ -51,6 +52,8 @@ function App() {
           </div>
         </div>
       </footer>
+
+      <Toaster theme="dark" position="top-center" />
     </div>
   );
 }

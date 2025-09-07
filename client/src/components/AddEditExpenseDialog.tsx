@@ -10,12 +10,22 @@ import {
 import ExpenseForm from "./ExpenseForm";
 import { type Expense } from "@/types";
 import { Edit } from "lucide-react";
+import { useState } from "react";
 
 function AddEditExpenseDialog({ expense }: { expense?: Expense }) {
   const isEdit = !!expense; // if expense is passed in, set edit mode to true
+  const [open, setOpen] = useState(false);
+
+  const toggleDialog = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={toggleDialog}>
       <DialogTrigger asChild>
         {isEdit ? (
           <Button variant="secondary" size="icon" className="size-8">
@@ -39,9 +49,10 @@ function AddEditExpenseDialog({ expense }: { expense?: Expense }) {
               categoryId: expense.categoryId,
             }}
             expenseId={expense.id}
+            onSuccess={closeDialog}
           />
         ) : (
-          <ExpenseForm />
+          <ExpenseForm onSuccess={closeDialog} />
         )}
       </DialogContent>
     </Dialog>
