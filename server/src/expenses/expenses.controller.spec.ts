@@ -3,6 +3,7 @@ import { ExpensesController } from './expenses.controller';
 import { ExpensesService } from './expenses.service';
 import { type Expense, type Category } from '@prisma/client';
 import { makeCategory, makeExpense } from '../../test/utils';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 // what to test in the controller layer:
 // what it returns, response shape
@@ -10,6 +11,7 @@ import { makeCategory, makeExpense } from '../../test/utils';
 
 const mockExpensesService = {
   findAll: jest.fn(),
+  update: jest.fn(),
 };
 
 describe('ExpensesController', () => {
@@ -70,7 +72,25 @@ describe('ExpensesController', () => {
   });
 
   describe('update', () => {
-    it.todo('propagates NotFoundException from service');
-    it.todo('propagates ForbiddenException from service');
+    it('propagates NotFoundException from service', async () => {
+      // mock service to throw not found
+      mockExpensesService.update.mockRejectedValueOnce(new NotFoundException());
+      // call controller method
+      // assert that method returns not found exception
+      await expect(controller.update(1, {})).rejects.toBeInstanceOf(
+        NotFoundException,
+      );
+    });
+    it('propagates ForbiddenException from service', async () => {
+      // mock service to throw not found
+      mockExpensesService.update.mockRejectedValueOnce(
+        new ForbiddenException(),
+      );
+      // call controller method
+      // assert that method returns not found exception
+      await expect(controller.update(1, {})).rejects.toBeInstanceOf(
+        ForbiddenException,
+      );
+    });
   });
 });
