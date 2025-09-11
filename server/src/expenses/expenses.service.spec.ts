@@ -1,12 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExpensesService } from './expenses.service';
 import { UpdateExpenseDto } from './dto/update-expense';
-import {
-  Injectable,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { type Expense } from '@prisma/client';
 
 const prismaMock = {
   expense: {
@@ -18,6 +15,15 @@ const prismaMock = {
 // jest.mock('src/prisma/prisma.service', () => ({
 //   PrismaService:
 // }))
+
+const makeExpense = (overrides: Partial<Expense> = {}): Expense => ({
+  id: 1,
+  amount: 10,
+  timestamp: new Date(),
+  categoryId: 2,
+  userId: 123,
+  ...overrides,
+});
 
 describe('ExpensesService', () => {
   let service: ExpensesService;
@@ -76,8 +82,24 @@ describe('ExpensesService', () => {
   });
 
   describe('update', () => {
-    it.todo(
-      'throws FORBIDDEN if user tries to edit expense that is not theirs',
-    );
+    it('throws FORBIDDEN if user tries to edit expense that is not theirs', async () => {
+      // mock checkExists
+      // set up expense id 1 belongs to user id 123
+      const userA = 123;
+      const userB = 456;
+      const expenseId = 1;
+      const mockExpense = makeExpense({
+        id: expenseId,
+        userId: userA,
+        amount: 100,
+      });
+
+      jest.spyOn(service, 'checkExists').mockResolvedValueOnce(mockExpense);
+
+      // assert that call to update rejects to a forbidden exception
+      await expect(
+        service.update(expenseId, userB, { amount: 100 } as UpdateExpenseDto),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
   });
 });
