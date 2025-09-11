@@ -9,6 +9,7 @@ const prismaMock = {
   expense: {
     update: jest.fn(),
     findUnique: jest.fn(),
+    findMany: jest.fn(),
   },
 };
 
@@ -91,6 +92,30 @@ describe('ExpensesService', () => {
       await expect(
         service.update(expenseId, userB, { amount: 100 } as UpdateExpenseDto),
       ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+  });
+
+  describe('findAll', () => {
+    const userId = 1;
+
+    it('calls findMany with correct parameters', async () => {
+      await service.findAll(userId);
+
+      expect(prismaMock.expense.findMany).toHaveBeenCalledWith({
+        where: { userId },
+        include: { category: true },
+        orderBy: {
+          timestamp: 'desc',
+        },
+      });
+    });
+
+    it('returns the result of findMany', async () => {
+      const mockResult = [makeExpense()];
+      prismaMock.expense.findMany.mockResolvedValueOnce(mockResult);
+
+      const result = await service.findAll(userId);
+      expect(result).toBe(mockResult);
     });
   });
 });
