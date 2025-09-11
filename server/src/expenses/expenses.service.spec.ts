@@ -3,7 +3,7 @@ import { ExpensesService } from './expenses.service';
 import { UpdateExpenseDto } from './dto/update-expense';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { type Expense } from '@prisma/client';
+import { makeExpense } from '../../test/utils';
 
 const prismaMock = {
   expense: {
@@ -15,15 +15,6 @@ const prismaMock = {
 // jest.mock('src/prisma/prisma.service', () => ({
 //   PrismaService:
 // }))
-
-const makeExpense = (overrides: Partial<Expense> = {}): Expense => ({
-  id: 1,
-  amount: 10,
-  timestamp: new Date(),
-  categoryId: 2,
-  userId: 123,
-  ...overrides,
-});
 
 describe('ExpensesService', () => {
   let service: ExpensesService;
